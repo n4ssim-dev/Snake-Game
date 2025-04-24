@@ -4,7 +4,6 @@ import time
 from snake import Snake
 from food import Food
 from score import Score
-from art import GAME_OVER_ART
 
 # Screen setup
 screen = turtle.Screen()

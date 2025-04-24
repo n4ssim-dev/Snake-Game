@@ -7,11 +7,13 @@ class Score:
         self.write_score()
 
     def refresh_score(self):
+        """Add a score point and refresh the score displayed on top."""
         self.score += 1
         turtle.clear()
         self.write_score()
 
     def write_score(self):
+        """Write the users score on top."""
         turtle.hideturtle()
         turtle.penup()
         turtle.goto(0, 270)
@@ -19,6 +21,7 @@ class Score:
         turtle.write(f"Score: {self.score}",align="center",font=("Arial", 18, "bold"))
 
     def is_lost(self):
+        """Clears the screen and display the game over sceen."""
         screen = turtle.Screen()
         screen.clear()
         screen.bgcolor("black")

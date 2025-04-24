@@ -19,6 +19,7 @@ class Snake:
             self.turtles.append(t)
 
     def add_snake(self):
+        """Create a 'turtle' and append it to the existing snake."""
         t = turtle.Turtle("square")
         t.color("white")
         t.penup()
@@ -37,12 +38,6 @@ class Snake:
             self.turtles[turtle_num].goto(new_x, new_y)
 
         self.turtles[0].forward(MOVE_DISTANCE)
-
-    def check_collision(self):
-        for _ in self.turtles:
-            if self.head == _:
-                game_is_on = False
-
 
     def move_right(self):
         if self.turtles[0].heading() != 180:
