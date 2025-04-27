@@ -17,6 +17,7 @@ class Snake:
             t.penup()
             t.goto(locations)
             self.turtles.append(t)
+        self.move()
 
     def add_snake(self):
         """Create a 'turtle' and append it to the existing snake."""
@@ -54,3 +55,13 @@ class Snake:
     def move_down(self):
         if self.turtles[0].heading() != 90:
             self.turtles[0].setheading(270)
+
+    # In snake.py
+    def reset_snakes(self):
+        for tortoise in self.turtles:
+            tortoise.hideturtle()
+            tortoise.clear()
+        self.turtles = []
+        self.create_snake()
+        # Reset to initial direction (facing right)
+        self.head.setheading(0)  # Add this line

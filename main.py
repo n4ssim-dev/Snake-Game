@@ -12,51 +12,52 @@ screen.bgcolor("black")
 screen.title("Snake")
 screen.tracer(0)
 
-# Global Scope
-turtles = []
-t_position = [0, 0]
-game_is_on = True
-
-# Ajoute les 3 tortues initiales
+# Initialize game objects
 snake = Snake()
 food = Food()
 score = Score()
+
+def restart_game():
+    global game_is_on
+    score.reset()
+    snake.reset_snakes()
+    food.refresh()
+    game_is_on = True
 
 # Définis les touches de navigation du serpent
 screen.onkey(lambda: snake.move_up(), "Up")
 screen.onkey(lambda: snake.move_down(), "Down")
 screen.onkey(lambda: snake.move_left(), "Left")
 screen.onkey(lambda: snake.move_right(), "Right")
-
+screen.onkey(lambda: restart_game(), "space")
 screen.listen()
 
 # Game loop
-while game_is_on:
-    # Attends que les tortues finissent leurs animations pour les afficher
+game_is_on = True
+while True:  # Changed to infinite loop, we'll control exit differently
     screen.update()
     time.sleep(0.1)
-    # fais bouger toutes les tortues de la file
-    snake.move()
 
-    # Augmente le score si la tete est a proximité de la nourriture
-    if snake.head.distance(food) < 15:
-        food.refresh()
-        score.refresh_score()
-        snake.add_snake()
+    if game_is_on:
+        snake.move()
 
-    # Vérifie que le serpent est dans le cadre sinon la partie est perdu
-    if snake.head.ycor() > 285 or snake.head.ycor() < -285 or snake.head.xcor() > 285 or snake.head.xcor() < -285:
-        game_is_on = False
-        if not game_is_on:
+        # Detect collision with food
+        if snake.head.distance(food) < 15:
+            food.refresh()
+            score.refresh_score()
+            snake.add_snake()
+
+        # Detect collisions (wall or self)
+        if (snake.head.ycor() > 285 or snake.head.ycor() < -285 or
+                snake.head.xcor() > 285 or snake.head.xcor() < -285 or
+                any(snake.head.distance(segment) < 10 for segment in snake.turtles[1:])):
+            score.reset()
             score.is_lost()
-
-    # Vérifie si la tete n'entre pas en collision avec un élément du corp
-    for turtle in snake.turtles[1:]:
-        if snake.head.distance(turtle) < 15:
             game_is_on = False
-            if not game_is_on:
-                score.is_lost()
-        else:
-            pass
+
+    # This handles the paused state after game over
+    while not game_is_on:
+        screen.update()
+        time.sleep(0.1)
 
 screen.exitonclick()
